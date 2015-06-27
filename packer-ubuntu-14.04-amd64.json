@@ -46,7 +46,7 @@
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "512"
+          "1024"
         ],
         [
           "modifyvm",
@@ -56,7 +56,7 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "packer-ubuntu-14.04-amd64"
+      "vm_name": "packer-ubuntu-14.04-amd64N2"
     },
     {
       "boot_command": [
