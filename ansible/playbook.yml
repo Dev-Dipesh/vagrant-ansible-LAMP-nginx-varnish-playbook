@@ -211,6 +211,12 @@
   #   copy: src=/vagrant/ansible/templates/supervisor-queue-listen.conf dest=/etc/supervisor/conf.d/supervisor-queue-listen.conf
   #   notify: reload queue listener
 
+  # Roles
+  # Varnish
+
+  roles:
+    - varnish
+
   # Common stuff
 
   handlers:
