@@ -1,5 +1,7 @@
 ---
 - hosts: all
+  vars_files:
+    - 'defaults/main.yml'
   sudo: true
   tasks:
 
@@ -39,7 +41,7 @@
     copy: src=/vagrant/ansible/templates/beanstalkd dest=/etc/default/beanstalkd
     notify: restart beanstalkd
 
-  # Apache2 
+  # Apache2
 
   - name: ensure apache is installed
     apt: name=apache2 state=present
@@ -142,7 +144,22 @@
 
   - name: install phpmyadmin
     apt: name=phpmyadmin state=latest
-  
+
+  # nginx
+
+  - name: install the nginx dependencies
+    apt: name={{ item }} state=present
+    with_items:
+      - perl
+      - libperl-dev
+      - monit
+      - build-essential
+
+  - include: 'tasks/main.yml'
+
+  - name: Nginx | Check if nginx is available
+    uri: url="http://127.0.0.1" status=200
+
   # Assets compilation
 
   - name: add nodejs ppa
@@ -170,7 +187,7 @@
       - /var/cache/site/meta
       - /var/cache/site/sessions
       - /var/cache/site/views
-  
+
   - name: ensure once more that 000-default.conf is deleted
     file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
     notify: restart apache
@@ -205,3 +222,8 @@
     #   action: supervisorctl name=queue_listen state=restarted
     - name: restart beanstalkd
       action: service name=beanstalkd state=restarted
+    - name: restart monit
+      service:
+        name: monit
+        state: restarted
+    - include: 'handlers/main.yml'

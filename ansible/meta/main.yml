@@ -1,0 +1,24 @@
+# file: nginx/meta/main.yml
+
+galaxy_info:
+  author: pjan vandaele
+  company: ANXS
+  description: Install and configure Nginx
+  min_ansible_version: 1.4
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  categories:
+  - system
+
+dependencies:
+  - ANXS.hostname
+  - ANXS.apt
+  - role: ANXS.build-essential
+    when: nginx_install_method is defined and nginx_install_method == "source"
+  - role: ANXS.perl
+    when: nginx_install_method is defined and nginx_install_method == "source"
+  - role: ANXS.monit
+    when: monit_protection is defined and monit_protection == true
